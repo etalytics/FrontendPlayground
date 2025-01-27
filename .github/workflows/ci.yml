@@ -5,14 +5,20 @@ on:
     branches:
       - master
   pull_request:
+    # types:
+    #   - opened
+    #   - synchronize
+    #   - reopened
+    #   - closed
 
-permissions:
-  actions: read
-  contents: read
+# permissions:
+#   actions: write
+#   contents: write
 
 jobs:
   main:
     runs-on: ubuntu-latest
+    if: ${{ github.event.action != 'closed' }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -20,23 +26,66 @@ jobs:
 
       - uses: pnpm/action-setup@v4
 
-      # This enables task distribution via Nx Cloud
-      # Run this command as early as possible, before dependencies are installed
-      # Learn more at https://nx.dev/ci/reference/nx-cloud-cli#npx-nxcloud-startcirun
-      # Uncomment this line to enable task distribution
-      # - run: pnpm dlx nx-cloud start-ci-run --distribute-on="3 linux-medium-js" --stop-agents-after="e2e-ci"
-
-      # Cache node_modules
       - uses: actions/setup-node@v4
         with:
           cache: 'pnpm'
 
       - run: pnpm install --frozen-lockfile
-      - run: pnpm exec playwright install --with-deps
-      - uses: nrwl/nx-set-shas@v4
 
-      # Prepend any command with "nx-cloud record --" to record its logs to Nx Cloud
-      # - run: pnpm exec nx-cloud record -- echo Hello World
-      # Nx Affected runs only tasks affected by the changes in this PR/commit. Learn more: https://nx.dev/ci/features/affected
-      # When you enable task distribution, run the e2e-ci task instead of e2e
+      # Build the Angular app
       - run: pnpm exec nx affected -t lint test build e2e
+      - run: pnpm exec nx build your-app-name --prod
+
+      # Upload build artifacts
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-artifacts
+          path: dist/apps/your-app-name
+
+  # deploy:
+  #   runs-on: ubuntu-latest
+  #   needs: main
+  #   if: ${{ github.event.action != 'closed' }}
+  #   steps:
+  #     - uses: actions/checkout@v4
+
+  #     - name: Download Build Artifacts
+  #       uses: actions/download-artifact@v3
+  #       with:
+  #         name: build-artifacts
+  #         path: dist/apps/your-app-name
+
+  #     # Build Docker image using the downloaded artifact
+  #     - name: Build Docker Image
+  #       run: |
+  #         docker build -t ${{ secrets.REGISTRY_URL }}/your-app-name:${{ github.run_id }} -f Dockerfile .
+
+  #     # Login to the custom registry
+  #     - name: Login to Custom Docker Registry
+  #       uses: docker/login-action@v2
+  #       with:
+  #         registry: ${{ secrets.REGISTRY_URL }}
+  #         username: ${{ secrets.REGISTRY_USERNAME }}
+  #         password: ${{ secrets.REGISTRY_PASSWORD }}
+
+  #     # Push the Docker image
+  #     - name: Push Docker Image
+  #       run: |
+  #         docker push ${{ secrets.REGISTRY_URL }}/your-app-name:${{ github.run_id }}
+
+  #     # Deploy to server
+  #     - name: Deploy to Self-Hosted Server
+  #       run: |
+  #         ssh user@your-server-ip "docker login ${{ secrets.REGISTRY_URL }} -u ${{ secrets.REGISTRY_USERNAME }} -p ${{ secrets.REGISTRY_PASSWORD }} && \
+  #                                  docker pull ${{ secrets.REGISTRY_URL }}/your-app-name:${{ github.run_id }} && \
+  #                                  docker stop pr-preview-${{ github.run_id }} || true && \
+  #                                  docker run -d --rm --name pr-preview-${{ github.run_id }} -p 3000:80 ${{ secrets.REGISTRY_URL }}/your-app-name:${{ github.run_id }}"
+
+  # cleanup:
+  #   runs-on: ubuntu-latest
+  #   if: ${{ github.event.action == 'closed' }}
+  #   steps:
+  #     - name: Cleanup Deployment
+  #       run: |
+  #         ssh user@your-server-ip "docker stop pr-preview-${{ github.run_id }} && docker rm pr-preview-${{ github.run_id }} || true"
