@@ -1,0 +1,41 @@
+{
+  "results": {
+    "tool": {
+      "name": "jest"
+    },
+    "summary": {
+      "tests": 2,
+      "passed": 2,
+      "failed": 0,
+      "pending": 0,
+      "skipped": 0,
+      "other": 0,
+      "start": 1739279010977,
+      "stop": 1739279012524
+    },
+    "tests": [
+      {
+        "name": "AppComponent should render title",
+        "duration": 72,
+        "status": "passed",
+        "rawStatus": "passed",
+        "type": "unit",
+        "filePath": "/home/marcel/dev/etalytics/FrontendPlayground/src/app/app.component.spec.ts",
+        "retries": 0,
+        "flaky": false,
+        "suite": "app.component.spec.ts > AppComponent"
+      },
+      {
+        "name": "AppComponent should have as title 'etalytics'",
+        "duration": 17,
+        "status": "passed",
+        "rawStatus": "passed",
+        "type": "unit",
+        "filePath": "/home/marcel/dev/etalytics/FrontendPlayground/src/app/app.component.spec.ts",
+        "retries": 0,
+        "flaky": false,
+        "suite": "app.component.spec.ts > AppComponent"
+      }
+    ]
+  }
+}
