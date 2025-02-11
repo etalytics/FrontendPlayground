@@ -90,8 +90,10 @@ jobs:
       - name: Publish E2E Test Report
         uses: ctrf-io/github-test-reporter@v1
         with:
-          report-path: './ctrf/*.json'
+          report-path: './e2e/ctrf/*.json'
           pull-request-report: true
+          previous-results-report: true
+          summary-report: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         if: always()
