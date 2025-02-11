@@ -24,7 +24,7 @@ export default defineConfig({
     trace: 'on-first-retry',
   },
   reporter: [
-    ['playwright-ctrf-json-reporter', {}]
+    ['playwright-ctrf-json-reporter', {outputDir: './../.report', outputFile:'e2e.json'}]
   ],
   /* Run your local dev server before starting the tests */
   webServer: {

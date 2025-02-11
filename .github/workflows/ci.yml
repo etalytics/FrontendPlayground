@@ -40,57 +40,18 @@ jobs:
         if: success()
         run: pnpm exec nx affected -t build
 
-      - name: Upload Build Artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: build-output
-          path: dist/
-        if: success()
+      - name: Install Playwright Browsers
+        if: success() && (contains(github.event.head_commit.message, '[e2e]') || contains(github.event.pull_request.title, '[e2e]'))
+        run: npx playwright install --with-deps
+
+      - name: E2E Tests
+        if: success() && (contains(github.event.head_commit.message, '[e2e]') || contains(github.event.pull_request.title, '[e2e]'))
+        run: pnpm exec nx affected -t e2e
 
       - name: Publish Test Report
         uses: ctrf-io/github-test-reporter@v1
         with:
-          report-path: './ctrf/*.json'
-          summary-report: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        if: always()
-
-  e2e:
-    needs: main
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - uses: pnpm/action-setup@v4
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: 'pnpm'
-
-      - run: pnpm install --frozen-lockfile
-
-      - name: Download Build Artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: build-output
-          path: dist/
-
-      - uses: nrwl/nx-set-shas@v4
-
-      - name: Install Playwright Browsers
-        run: npx playwright install --with-deps
-
-      - name: E2E Tests
-        run: pnpm exec nx affected -t e2e
-
-      - name: Publish E2E Test Report
-        uses: ctrf-io/github-test-reporter@v1
-        with:
-          report-path: './e2e/ctrf/*.json'
+          report-path: './.report/*.json'
           summary-report: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
