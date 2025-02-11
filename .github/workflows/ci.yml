@@ -32,6 +32,7 @@ jobs:
       - name: Lint
         run: pnpm exec nx affected -t lint
 
+
       - name: Test
         if: success()
         run: pnpm exec nx affected -t test
