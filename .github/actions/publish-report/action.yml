@@ -6,6 +6,9 @@ inputs:
     description: 'Path to the test report files'
     required: true
     default: './.report/*.json'
+  github-token:
+    description: 'GitHub Token for authentication'
+    required: true
 
 runs:
   using: composite
@@ -16,4 +19,4 @@ runs:
       with:
         report-path: ${{ inputs.report-path }}
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ inputs.github-token }}
