@@ -1,0 +1,42 @@
+name: Build and Test
+
+on:
+  workflow_call:
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Environment
+        uses: ./.github/actions/setup-environment
+
+      - name: Run Lint on Affected Files
+        run: pnpm exec nx affected -t lint
+        continue-on-error: false
+
+      - name: Run Unit Tests on Affected Files
+        run: pnpm exec nx affected -t test
+        continue-on-error: false
+
+      - name: Build Affected Projects
+        run: pnpm exec nx affected -t build
+        continue-on-error: false
+
+      - name: Publish Test Report
+        uses: ./.github/actions/publish-report
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+
+      - name: Upload Build Artifacts
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifacts
+          path: dist/
+          retention-days: 1

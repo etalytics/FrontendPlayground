@@ -1,0 +1,19 @@
+# 🧪 Test Report Summary
+
+| **Total Tests** | **✔️ Passed** | **❌ Failed** | **⚠️ Skipped** | **⏱️ Duration** |
+| --- | --- | --- | --- | --- |
+| {{ctrf.summary.tests}} | {{ctrf.summary.passed}} | {{ctrf.summary.failed}} | {{ctrf.summary.skipped}} | {{formatDuration ctrf.summary.start ctrf.summary.stop}} |
+
+
+{{#if ctrf.summary.failed}}
+  ## ❌ Failed Tests Details
+
+  | **Test Name** | **Error Message** | **⏲️ Duration (ms)** |
+  | --- | --- | --- |
+  {{#each ctrf.tests}}
+    {{#if (eq this.status "failed")}}
+      | {{this.name}} | {{stripAnsi this.message}} | {{this.duration}} |
+    {{/if}}
+  {{/each}}
+{{/if}}
+
