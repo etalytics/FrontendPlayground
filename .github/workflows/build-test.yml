@@ -13,24 +13,22 @@ jobs:
           fetch-depth: 0
 
       - name: Setup Environment
-        uses: ./.github/actions/setup
+        uses: ./.github/actions/setup-environment
 
-      - name: Set NX SHAs
-        uses: nrwl/nx-set-shas@v4
+      - name: Run Lint on Affected Files
+        run: pnpm exec nx affected -t lint
+        continue-on-error: false
 
-      - name: Run Checks
-        run: |
-          pnpm exec nx affected -t lint
-          pnpm exec nx affected -t test
-          pnpm exec nx affected -t build
+      - name: Run Unit Tests on Affected Files
+        run: pnpm exec nx affected -t test
+        continue-on-error: false
+
+      - name: Build Affected Projects
+        run: pnpm exec nx affected -t build
+        continue-on-error: false
 
       - name: Publish Test Report
-        uses: ctrf-io/github-test-reporter@v1
-        if: always()
-        with:
-          report-path: './.report/*.json'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: ./.github/actions/publish-report
 
       - name: Upload Build Artifacts
         if: success()

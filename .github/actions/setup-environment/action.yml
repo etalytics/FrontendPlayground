@@ -6,23 +6,39 @@ inputs:
     description: 'Whether to install Playwright'
     required: false
     default: 'false'
+  node-version:
+    description: 'Node.js version to use'
+    required: false
+    default: '18'
 
 runs:
   using: composite
   steps:
+    - name: Cache PNPM Dependencies
+      uses: actions/cache@v3
+      with:
+        path: ~/.pnpm-store
+        key: ${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-pnpm-
+
     - name: Setup PNPM
       uses: pnpm/action-setup@v4
 
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
+        node-version: ${{ inputs.node-version }}
         cache: 'pnpm'
 
     - name: Install Dependencies
       shell: bash
       run: pnpm install --frozen-lockfile
 
+    - name: Set NX SHAs
+      uses: nrwl/nx-set-shas@v4
+
     - name: Setup Playwright
-      if: inputs.install-playwright == 'true'
+      if: ${{ inputs.install-playwright == 'true' }}
       shell: bash
       run: npx playwright install --with-deps
