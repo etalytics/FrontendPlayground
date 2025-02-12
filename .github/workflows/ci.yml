@@ -12,43 +12,88 @@ permissions:
   pull-requests: write
 
 jobs:
-  main:
+  build-and-test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - uses: pnpm/action-setup@v4
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v4
 
-      - uses: actions/setup-node@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: 'pnpm'
 
-      - run: pnpm install --frozen-lockfile
-      - uses: nrwl/nx-set-shas@v4
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
 
-      - name: Lint
+      - name: Set NX SHAs
+        uses: nrwl/nx-set-shas@v4
+
+      - name: Lint Affected Projects
         run: pnpm exec nx affected -t lint
 
-
-      - name: Test
+      - name: Run Unit Tests
         if: success()
         run: pnpm exec nx affected -t test
 
-      - name: Build
+      - name: Build Affected Projects
         if: success()
         run: pnpm exec nx affected -t build
 
-      - name: Install Playwright Browsers
+      - name: Upload Build Artifacts
         if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifacts
+          path: dist/
+
+  e2e-tests:
+    runs-on: ubuntu-latest
+    needs: build-and-test
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Set NX SHAs
+        uses: nrwl/nx-set-shas@v4
+
+      - name: Download Build Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifacts
+
+      - name: Install Playwright Browsers
         run: npx playwright install --with-deps
 
-      - name: E2E Tests
-        if: success()
+      - name: Run E2E Tests
         run: pnpm exec nx affected -t e2e
 
+  publish-report:
+    runs-on: ubuntu-latest
+    needs: [build-and-test, e2e-tests]
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
       - name: Publish Test Report
         uses: ctrf-io/github-test-reporter@v1
