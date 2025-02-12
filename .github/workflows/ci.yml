@@ -49,12 +49,13 @@ jobs:
         if: success()
         run: pnpm exec nx affected -t e2e
 
+
       - name: Publish Test Report
         uses: ctrf-io/github-test-reporter@v1
         with:
           report-path: './.report/*.json'
           pull-request: true
-          update-comment: true
+          group-by: 'filePath'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         if: always()
