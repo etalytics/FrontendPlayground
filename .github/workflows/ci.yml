@@ -37,29 +37,23 @@ jobs:
         if: success()
         run: pnpm exec nx affected -t test
 
-#      - name: Build
-#        if: success()
-#        run: pnpm exec nx affected -t build
+      - name: Build
+        if: success()
+        run: pnpm exec nx affected -t build
 
-#      - name: Install Playwright Browsers
-#        if: success()
-#        run: npx playwright install --with-deps
+      - name: Install Playwright Browsers
+        if: success()
+        run: npx playwright install --with-deps
 
-#      - name: E2E Tests
-#        if: success()
-#        run: pnpm exec nx affected -t e2e
+      - name: E2E Tests
+        if: success()
+        run: pnpm exec nx affected -t e2e
 
 
       - name: Publish Test Report
         uses: ctrf-io/github-test-reporter@v1
         with:
           report-path: './.report/*.json'
-          pull-request: true
-          overwrite-comment: true
-#          template-path: './.github/templates/custom-report.hbs'
-#          custom-report: true
-          group-by: 'filePath'
-          always-group-by: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         if: always()
