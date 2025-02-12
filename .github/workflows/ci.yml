@@ -11,17 +11,9 @@ permissions:
   pull-requests: write
 
 jobs:
-  setup:
-    uses: ./.github/workflows/setup.yml
-
   build-and-test:
-    needs: setup
     uses: ./.github/workflows/build-test.yml
-    with:
-      cache-key: ${{ needs.setup.outputs.cache-key }}
 
   e2e:
-    needs: [setup, build-and-test]
+    needs: build-and-test
     uses: ./.github/workflows/e2e.yml
-    with:
-      cache-key: ${{ needs.setup.outputs.cache-key }}
