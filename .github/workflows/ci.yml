@@ -56,8 +56,10 @@ jobs:
           report-path: './.report/*.json'
           pull-request: true
           overwrite-comment: true
-          template-path: './.github/templates/custom-report.hbs'
-          custom-report: true
+#          template-path: './.github/templates/custom-report.hbs'
+#          custom-report: true
+          group-by: 'filePath'
+          always-group-by: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         if: always()
