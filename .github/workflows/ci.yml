@@ -57,6 +57,7 @@ jobs:
           pull-request: true
           update-comment: true
           template-path: './.github/templates/custom-report.hbs'
+          custom-report: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         if: always()
