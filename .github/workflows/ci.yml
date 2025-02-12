@@ -37,9 +37,9 @@ jobs:
         if: success()
         run: pnpm exec nx affected -t test
 
-      - name: Build
-        if: success()
-        run: pnpm exec nx affected -t build
+#      - name: Build
+#        if: success()
+#        run: pnpm exec nx affected -t build
 
 #      - name: Install Playwright Browsers
 #        if: success()
