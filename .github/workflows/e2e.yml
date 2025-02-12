@@ -4,19 +4,24 @@ on:
   workflow_call:
 
 jobs:
-  setup:
-    uses: ./.github/workflows/setup.yml
-    with:
-      install-playwright: true
-
-  run-e2e:
-    needs: setup
+  e2e-tests:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Environment
+        uses: ./.github/actions/setup
+        with:
+          install-playwright: 'true'
+
       - name: Download Build Artifacts
         uses: actions/download-artifact@v4
         with:
           name: build-artifacts
+          path: dist/
 
       - name: Run E2E Tests
         run: pnpm exec nx affected -t e2e

@@ -5,12 +5,16 @@ on:
 
 jobs:
   build-and-test:
-    uses: ./.github/workflows/setup.yml
-
-  run-checks:
-    needs: build-and-test
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Environment
+        uses: ./.github/actions/setup
+
       - name: Set NX SHAs
         uses: nrwl/nx-set-shas@v4
 
