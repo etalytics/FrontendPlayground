@@ -1,0 +1,43 @@
+name: Setup Environment
+
+on:
+  workflow_call:
+    outputs:
+      cache-key:
+        description: "Cache key for dependencies"
+        value: ${{ jobs.setup.outputs.cache-key }}
+
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    outputs:
+      cache-key: ${{ steps.set-cache-key.outputs.cache-key }}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Generate Cache Key
+        id: set-cache-key
+        run: echo "cache-key=${{ runner.os }}-deps-${{ hashFiles('**/pnpm-lock.yaml') }}" >> $GITHUB_OUTPUT
+
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          cache: 'pnpm'
+
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Cache Dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            node_modules
+            .nx/cache
+          key: ${{ steps.set-cache-key.outputs.cache-key }}

@@ -1,0 +1,50 @@
+name: Build and Test
+
+on:
+  workflow_call:
+    inputs:
+      cache-key:
+        required: true
+        type: string
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Restore Cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            node_modules
+            .nx/cache
+          key: ${{ inputs.cache-key }}
+
+      - name: Set NX SHAs
+        uses: nrwl/nx-set-shas@v4
+
+      - name: Run Checks
+        run: |
+          pnpm exec nx affected -t lint
+          pnpm exec nx affected -t test
+          pnpm exec nx affected -t build
+
+      - name: Publish Test Report
+        uses: ctrf-io/github-test-reporter@v1
+        if: always()
+        with:
+          report-path: './.report/*.json'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload Build Artifacts
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifacts
+          path: dist/
+          retention-days: 1
