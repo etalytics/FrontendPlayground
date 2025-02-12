@@ -4,6 +4,14 @@
 | --- | --- | --- | --- | --- |
 | {{ctrf.summary.tests}} | {{ctrf.summary.passed}} | {{ctrf.summary.failed}} | {{ctrf.summary.skipped}} | {{formatDuration ctrf.summary.start ctrf.summary.stop}} |
 
+## 🕒 Execution Details
+
+- **Workflow:** [{{github.workflow}}]({{github.server_url}}/{{github.repository}}/actions/runs/{{github.run_id}})
+- **Job:** {{github.job}}
+- **Branch:** {{github.ref_name}}
+- **Commit SHA:** [{{github.sha}}]({{github.server_url}}/{{github.repository}}/commit/{{github.sha}})
+- **Triggered by:** [{{github.actor}}]({{github.server_url}}/{{github.actor}})
+
 {{#if ctrf.summary.failed}}
   ## ❌ Failed Tests Details
 
@@ -11,7 +19,7 @@
   | --- | --- | --- |
   {{#each ctrf.tests}}
     {{#if (eq this.status "failed")}}
-      | {{this.name}} | {{this.message}} | {{this.duration}} |
+      | {{this.name}} | {{stripAnsi this.message}} | {{this.duration}} |
     {{/if}}
   {{/each}}
 {{/if}}
