@@ -1,0 +1,19 @@
+name: Cleanup PR Preview
+
+on:
+  workflow_call:
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Cleanup Preview
+        uses: rossjrw/pr-preview-action@v1.6.0
+        with:
+          action: remove
+          token: ${{ secrets.GITHUB_TOKEN }}
