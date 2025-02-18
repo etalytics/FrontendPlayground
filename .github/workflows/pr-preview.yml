@@ -24,7 +24,7 @@ jobs:
         if: github.event.action != 'closed'
         uses: rossjrw/pr-preview-action@v1.6.0
         with:
-          source-dir: ./dist/etalytics
+          source-dir: ./dist/etalytics/browser
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Cleanup Preview
