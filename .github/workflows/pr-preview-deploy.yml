@@ -1,10 +1,10 @@
-name: PR Preview
+name: Deploy PR Preview
 
 on:
   workflow_call:
 
 jobs:
-  deploy-preview:
+  deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
@@ -19,15 +19,7 @@ jobs:
           path: dist/
 
       - name: Deploy Preview
-        if: github.event.action != 'closed'
         uses: rossjrw/pr-preview-action@v1.6.0
         with:
           source-dir: ./dist/etalytics/browser
-          token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Cleanup Preview
-        if: github.event.action == 'closed'
-        uses: rossjrw/pr-preview-action@v1.6.0
-        with:
-          action: remove
           token: ${{ secrets.GITHUB_TOKEN }}
