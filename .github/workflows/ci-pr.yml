@@ -1,10 +1,6 @@
-name: CI
+name: CI Pull Request
 
 on:
-  push:
-    branches:
-      - master
-      - release/*
   pull_request:
     types:
       - opened
@@ -12,22 +8,17 @@ on:
       - synchronize
       - closed
 
-
 permissions:
   actions: read
   contents: write
   pull-requests: write
 
-
 jobs:
   build-and-test:
+    if: github.event.action != 'closed'
     uses: ./.github/workflows/build-test.yml
 
-#  e2e:
-#    needs: build-and-test
-#    uses: ./.github/workflows/e2e.yml
-
   pr-preview:
-    needs: build-and-test
-    if: github.event_name == 'pull_request'
+    needs: [build-and-test]
+    if: always()  # This ensures cleanup runs even if build is skipped
     uses: ./.github/workflows/pr-preview.yml
