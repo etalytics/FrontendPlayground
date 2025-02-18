@@ -1,5 +1,4 @@
 name: PR Preview
-concurrency: preview-${{ github.ref }}
 
 on:
   workflow_call:
@@ -27,7 +26,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Cleanup Preview
-        if: github.event.action == 'closed' && !github.event.pull_request.merged
+        if: github.event.action == 'closed'
         uses: rossjrw/pr-preview-action@v1.6.0
         with:
           action: remove
