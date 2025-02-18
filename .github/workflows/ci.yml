@@ -6,6 +6,14 @@ on:
       - master
       - release/*
   pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - closed
+
+concurrency: preview-${{ github.ref }}
+
 
 permissions:
   actions: read
@@ -19,3 +27,8 @@ jobs:
   e2e:
     needs: build-and-test
     uses: ./.github/workflows/e2e.yml
+
+  pr-preview:
+    needs: build-and-test
+    if: github.event_name == 'pull_request'
+    uses: ./.github/workflows/pr-preview.yml
