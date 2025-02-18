@@ -2,6 +2,10 @@ name: 'Setup Environment'
 description: 'Sets up Node.js, PNPM, and installs dependencies'
 
 inputs:
+  enable-cache:
+    description: 'Whether to enable caching'
+    required: false
+    default: 'true'
   install-playwright:
     description: 'Whether to install Playwright'
     required: false
@@ -17,6 +21,13 @@ runs:
       uses: actions/setup-node@v4
       with:
         cache: 'pnpm'
+
+    - name: Setup Cache
+      if: inputs.enable-cache == 'true'
+      uses: ./.github/actions/cache-manager
+      with:
+        cache-nx: 'true'
+        cache-playwright: ${{ inputs.install-playwright }}
 
     - name: Install Dependencies
       shell: bash
