@@ -21,7 +21,7 @@ runs:
       with:
         path: .nx/cache
         key: nx-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
-        restore-keys: |
+        restore-keys: | # Fallback to other cache if specific hash is not found
           nx-${{ runner.os }}-
 
     - name: Cache Playwright browsers
