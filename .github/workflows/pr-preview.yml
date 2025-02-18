@@ -24,8 +24,6 @@ jobs:
         uses: rossjrw/pr-preview-action@v1.6.0
         with:
           source-dir: ./dist/etalytics
-          preview-branch: gh-pages
-          umbrella-dir: pr-preview
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Cleanup Preview
@@ -33,6 +31,4 @@ jobs:
         uses: rossjrw/pr-preview-action@v1.6.0
         with:
           action: remove
-          preview-branch: gh-pages
-          umbrella-dir: pr-preview
           token: ${{ secrets.GITHUB_TOKEN }}
