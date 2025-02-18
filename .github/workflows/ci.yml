@@ -29,6 +29,5 @@ jobs:
 #    uses: ./.github/workflows/e2e.yml
 
   preview:
-    if: github.event_name == 'pull_request'
     needs: [build-and-test]
     uses: ./.github/workflows/pr-preview.yml

@@ -1,5 +1,4 @@
 name: PR Preview
-concurrency: preview-${{ github.ref }}
 
 on:
   workflow_call:
