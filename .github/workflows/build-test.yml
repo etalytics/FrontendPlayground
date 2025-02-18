@@ -24,7 +24,7 @@ jobs:
         continue-on-error: false
 
       - name: Build Affected Projects
-        run: pnpm exec nx affected -t build -- --base-href=/pr-preview/pr-${{ github.event.number }}/
+        run: pnpm exec nx affected -t build -- --base-href=/FrontendPlayground/pr-preview/pr-${{ github.event.number }}/ #When running in Branch
         continue-on-error: false
 
       - name: Publish Test Report
