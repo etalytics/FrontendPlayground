@@ -6,16 +6,28 @@ on:
       - master
       - release/*
   pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - closed
+
 
 permissions:
   actions: read
-  contents: read
+  contents: write
   pull-requests: write
+
 
 jobs:
   build-and-test:
     uses: ./.github/workflows/build-test.yml
 
-  e2e:
+#  e2e:
+#    needs: build-and-test
+#    uses: ./.github/workflows/e2e.yml
+
+  pr-preview:
     needs: build-and-test
-    uses: ./.github/workflows/e2e.yml
+    if: github.event_name == 'pull_request'
+    uses: ./.github/workflows/pr-preview.yml
