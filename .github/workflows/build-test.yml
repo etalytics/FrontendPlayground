@@ -2,6 +2,11 @@ name: Build and Test
 
 on:
   workflow_call:
+    inputs:
+      timeout-minutes:
+        required: false
+        type: number
+        default: 15
 
 jobs:
   run:

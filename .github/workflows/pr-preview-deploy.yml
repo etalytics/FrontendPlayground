@@ -2,6 +2,11 @@ name: Deploy PR Preview
 
 on:
   workflow_call:
+    inputs:
+      timeout-minutes:
+        required: false
+        type: number
+        default: 5
 
 jobs:
   deploy:
