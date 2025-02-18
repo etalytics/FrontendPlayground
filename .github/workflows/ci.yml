@@ -12,13 +12,12 @@ on:
       - synchronize
       - closed
 
-concurrency: preview-${{ github.ref }}
-
 
 permissions:
   actions: read
-  contents: read
+  contents: write
   pull-requests: write
+
 
 jobs:
   build-and-test:
