@@ -4,8 +4,8 @@ on:
   workflow_call:
 
 jobs:
-  deploy:
-    runs-on: self-hosted
+  deploy-preview:
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
