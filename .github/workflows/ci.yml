@@ -2,32 +2,33 @@ name: CI
 
 on:
   push:
-    branches:
-      - master
-      - release/*
+    branches: [main, release/*]
   pull_request:
-    types:
-      - opened
-      - reopened
-      - synchronize
-      - closed
+    types: [opened, reopened, synchronize, closed]
 
+# Cancel in-progress runs when a new commit is pushed
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 permissions:
   actions: read
   contents: write
   pull-requests: write
 
-
 jobs:
   build-and-test:
+    if: |
+      github.event_name == 'push' ||
+      (github.event_name == 'pull_request' && github.event.action != 'closed')
     uses: ./.github/workflows/build-test.yml
 
 #  e2e:
-#    needs: build-and-test
+#    if: github.event_name == 'pull_request'
+#    needs: [build-and-test]
 #    uses: ./.github/workflows/e2e.yml
 
-  pr-preview:
-    needs: build-and-test
+  preview:
     if: github.event_name == 'pull_request'
+    needs: [build-and-test]
     uses: ./.github/workflows/pr-preview.yml
