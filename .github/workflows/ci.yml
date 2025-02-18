@@ -23,10 +23,10 @@ jobs:
       (github.event_name == 'pull_request' && github.event.action != 'closed')
     uses: ./.github/workflows/build-test.yml
 
-  #  e2e:
-  #    if: github.event_name == 'pull_request'
-  #    needs: [build-and-test]
-  #    uses: ./.github/workflows/e2e.yml
+    e2e:
+      if: github.event_name == 'pull_request'
+      needs: [build-and-test]
+      uses: ./.github/workflows/e2e.yml
 
   deploy-preview:
     if: |
