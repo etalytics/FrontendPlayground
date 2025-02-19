@@ -2,6 +2,11 @@ name: Build and Test
 
 on:
   workflow_call:
+    inputs:
+      timeout-minutes:
+        required: false
+        type: number
+        default: 15
 
 jobs:
   run:
@@ -24,7 +29,12 @@ jobs:
         continue-on-error: false
 
       - name: Build Affected Projects
-        run: pnpm exec nx affected -t build -- --base-href=/FrontendPlayground/pr-preview/pr-${{ github.event.number }}/ #When running in Branch
+        run: | #When running inside a PR we want to replace the base-href with the PR number to satisfy the github pages deployment
+          if [[ ${{ github.event_name }} == 'pull_request' ]]; then
+            pnpm exec nx affected -t build -- --base-href=/FrontendPlayground/pr-preview/pr-${{ github.event.number }}/
+          else
+            pnpm exec nx affected -t build
+          fi
         continue-on-error: false
 
       - name: Publish Test Report
