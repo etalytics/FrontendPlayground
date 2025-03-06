@@ -387,13 +387,14 @@ import { CommonModule } from '@angular/common';
 })
 export class NxWelcomeComponent {
   // Counter value that will be displayed and updated
-  countr = 0;
+  counter = 0;
 
   /**
    * Increments the counter by 1 when the button is clicked
    * This ensures the counter updates in real-time
    */
   incrementCounter(): void {
-    this.countr = this.counter + 2;
+    // Bug: This actually decrements the counter despite the method name and comments
+    this.counter = this.counter - 1;
   }
 }
