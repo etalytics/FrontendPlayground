@@ -1,0 +1,44 @@
+.stepper {
+  display: flex;
+  align-items: center;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  padding: 4px;
+  gap: 8px;
+  width: fit-content;
+}
+
+.stepper-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px 12px;
+  font-size: 18px;
+  color: #212529;
+  transition: opacity 0.2s;
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  &:hover:not(:disabled) {
+    opacity: 0.8;
+  }
+}
+
+.stepper-value {
+  min-width: 24px;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 500;
+  color: #212529;
+}
+
+.stepper-icon {
+  font-weight: bold;
+  line-height: 1;
+} 
