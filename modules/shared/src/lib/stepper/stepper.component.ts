@@ -18,6 +18,10 @@ export class StepperComponent {
   value = model<number>(0);
 
   increment(): void {
+    const newValue = this.value() + this.step();
+    if (newValue <= this.max()) {
+      this.value.set(newValue);
+    }
   }
 
   decrement(): void {
