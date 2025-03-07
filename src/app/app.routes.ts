@@ -2,7 +2,7 @@ import { Route } from '@angular/router';
 
 export const appRoutes: Route[] = [
     {
-        path: 'shared',
+        path: '',
         title: 'shared',
         loadChildren: () =>
           import('modules/shared/src/lib/lib.routes').then(
