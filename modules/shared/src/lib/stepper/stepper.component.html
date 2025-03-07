@@ -1,0 +1,12 @@
+<!-- Stepper container -->
+<div class="stepper">
+  <button class="stepper-button" (click)="decrement()" [disabled]="value() <= min()">
+    <span class="stepper-icon">−</span>
+  </button>
+  
+  <span class="stepper-value">{{ value() }}</span>
+  
+  <button class="stepper-button" (click)="increment()" [disabled]="value() >= max()">
+    <span class="stepper-icon">+</span>
+  </button>
+</div> 
