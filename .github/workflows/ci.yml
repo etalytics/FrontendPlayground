@@ -16,6 +16,7 @@ permissions:
   contents: write
   pull-requests: write
 
+
 jobs:
   runs-on: arc-runner-set
   build-and-test:
