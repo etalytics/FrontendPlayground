@@ -11,3 +11,14 @@ jobs:
     runs-on: arc-runner-set
     steps:
       - run: echo "🎉 This job uses runner scale set runners!"
+
+  Explore-GitHub-Actions2:
+    runs-on: arc-runner-set
+    steps:
+      - run: echo "🎉 This job uses runner scale set runners!"
+
+  Explore-GitHub-Actions3:
+    runs-on: arc-runner-set
+    steps:
+      - run: echo "🎉 This job uses runner scale set runners!"
+
