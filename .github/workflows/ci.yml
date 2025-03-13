@@ -18,7 +18,6 @@ permissions:
 
 
 jobs:
-  runs-on: arc-runner-set
   build-and-test:
     if: |
       github.event_name == 'push' ||
@@ -26,13 +25,11 @@ jobs:
     uses: ./.github/workflows/build-test.yml
 
   e2e:
-    runs-on: arc-runner-set
     if: github.event_name == 'pull_request'
     needs: [build-and-test]
     uses: ./.github/workflows/e2e.yml
 
   deploy-preview:
-    runs-on: arc-runner-set
     if: |
       github.event_name == 'pull_request' &&
       github.event.action != 'closed'
@@ -40,7 +37,6 @@ jobs:
     uses: ./.github/workflows/pr-preview-deploy.yml
 
   cleanup-preview:
-    runs-on: arc-runner-set
     if: |
       github.event_name == 'pull_request' &&
       github.event.action == 'closed'
