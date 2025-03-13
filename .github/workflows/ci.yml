@@ -1,42 +1,9 @@
-name: CI
-
+name: Actions Runner Controller Demo
 on:
-  push:
-    branches: [main, release/*]
-  pull_request:
-    types: [opened, reopened, synchronize, closed]
-
-# Cancel in-progress runs when a new commit is pushed
-concurrency:
-  group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.ref }}
-  cancel-in-progress: true
-
-permissions:
-  actions: read
-  contents: write
-  pull-requests: write
+  workflow_dispatch:
 
 jobs:
-  build-and-test:
-    if: |
-      github.event_name == 'push' ||
-      (github.event_name == 'pull_request' && github.event.action != 'closed')
-    uses: ./.github/workflows/build-test.yml
-
-  e2e:
-    if: github.event_name == 'pull_request'
-    needs: [build-and-test]
-    uses: ./.github/workflows/e2e.yml
-
-  deploy-preview:
-    if: |
-      github.event_name == 'pull_request' &&
-      github.event.action != 'closed'
-    needs: [build-and-test]
-    uses: ./.github/workflows/pr-preview-deploy.yml
-
-  cleanup-preview:
-    if: |
-      github.event_name == 'pull_request' &&
-      github.event.action == 'closed'
-    uses: ./.github/workflows/pr-preview-cleanup.yml
+  Explore-GitHub-Actions:
+    runs-on: arc-runner-set
+    steps:
+      - run: echo "🎉 This job uses runner scale set runners!"
