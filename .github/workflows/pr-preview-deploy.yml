@@ -26,7 +26,7 @@ jobs:
       - name: Install Rsync
         run: |
           sudo apt update
-          sudo apt install rsync
+          sudo apt install rsync -y
 
       - name: Deploy Preview
         uses: rossjrw/pr-preview-action@v1.6.0
