@@ -23,6 +23,9 @@ jobs:
           name: build-artifacts
           path: dist/
 
+      - name: Install Rsync
+        run: sudo apt-get install rsync
+
       - name: Deploy Preview
         uses: rossjrw/pr-preview-action@v1.6.0
         with:
