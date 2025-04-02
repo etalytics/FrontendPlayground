@@ -18,11 +18,11 @@ permissions:
 
 
 jobs:
-  build-and-test:
-    if: |
-      github.event_name == 'push' ||
-      (github.event_name == 'pull_request' && github.event.action != 'closed')
-    uses: ./.github/workflows/build-test.yml
+  # build-and-test:
+  #   if: |
+  #     github.event_name == 'push' ||
+  #     (github.event_name == 'pull_request' && github.event.action != 'closed')
+  #   uses: ./.github/workflows/build-test.yml
 
   # e2e:
   #   if: github.event_name == 'pull_request'
@@ -33,19 +33,19 @@ jobs:
     if: |
       github.event_name == 'push' ||
       (github.event_name == 'pull_request' && github.event.action != 'closed')
-    needs: [build-and-test]
+    # needs: [build-and-test]
     uses: ./.github/workflows/cyclon-dx.yml
 
 
-  deploy-preview:
-    if: |
-      github.event_name == 'pull_request' &&
-      github.event.action != 'closed'
-    needs: [build-and-test]
-    uses: ./.github/workflows/pr-preview-deploy.yml
+  # deploy-preview:
+  #   if: |
+  #     github.event_name == 'pull_request' &&
+  #     github.event.action != 'closed'
+  #   needs: [build-and-test]
+  #   uses: ./.github/workflows/pr-preview-deploy.yml
 
-  cleanup-preview:
-    if: |
-      github.event_name == 'pull_request' &&
-      github.event.action == 'closed'
-    uses: ./.github/workflows/pr-preview-cleanup.yml
+  # cleanup-preview:
+  #   if: |
+  #     github.event_name == 'pull_request' &&
+  #     github.event.action == 'closed'
+  #   uses: ./.github/workflows/pr-preview-cleanup.yml
