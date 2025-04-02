@@ -84,9 +84,9 @@
     "serve-static": {
       "executor": "@nx/web:file-server",
       "options": {
-        "buildTarget": "etalytics:build",
         "port": 4200,
         "staticFilePath": "dist/etalytics/browser",
+        "watch": false,
         "spa": true
       }
     }

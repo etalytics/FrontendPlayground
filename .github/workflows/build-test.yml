@@ -10,7 +10,7 @@ on:
 
 jobs:
   run:
-    runs-on: ubuntu-latest
+    runs-on: arc-runner-set
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -25,16 +25,12 @@ jobs:
         continue-on-error: false
 
       - name: Run Unit Tests on Affected Files
-        run: pnpm exec nx affected -t test
+        run: pnpm exec nx affected -t test -c ci --runInBand --cacheable
         continue-on-error: false
 
       - name: Build Affected Projects
-        run: | #When running inside a PR we want to replace the base-href with the PR number to satisfy the github pages deployment
-          if [[ ${{ github.event_name }} == 'pull_request' ]]; then
-            pnpm exec nx affected -t build -- --base-href=/FrontendPlayground/pr-preview/pr-${{ github.event.number }}/
-          else
-            pnpm exec nx affected -t build
-          fi
+        run:
+            pnpm exec nx affected -t build -c production
         continue-on-error: false
 
       - name: Publish Test Report
