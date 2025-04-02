@@ -13,40 +13,84 @@ jobs:
     runs-on: arc-runner-set
     timeout-minutes: ${{ inputs.timeout-minutes }}
     
-    container:
-      image: ghcr.io/oss-review-toolkit/ort:37.0.0
-    
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
-      - name: Setup PNPM
-        uses: pnpm/action-setup@v4
       
-      - name: Install dependencies and run ORT
-        shell: bash
-        run: |          
-          # Install dependencies
-          pnpm install
-          
-          # Run ORT analyze
-          ort analyze --input-dir . --output-dir .
+      - name: Run ORT Action
+        uses: oss-review-toolkit/ort-ci-github-action@v1
+        with:
+          # Run only analyzer and reporter steps to generate SBOM
+          run: 'analyzer,reporter'
           
           # Generate CycloneDX report
-          ort report \
-            -i "analyzer-result.yml" \
-            -o "." \
-            -f "CycloneDx" \
-            --report-option "CycloneDx=output.file.formats=json" \
+          ort-cli-report-args: >
+            -f CycloneDx
+            --report-option "CycloneDx=output.file.formats=json"
             --repository-configuration-file ".ort.yml"
       
-      - name: Upload SBOM artifacts
+      - name: Upload SBOM Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: sbom-reports
           path: |
-            analyzer-result.yml
-            bom.cyclonedx.json
+            .ort/analyzer/analyzer-result.yml
+            .ort/reporter/bom.cyclonedx.json
           retention-days: 30
+
+
+
+# name: Generate SBOM
+
+# on:
+#   workflow_call:
+#     inputs:
+#       timeout-minutes:
+#         required: false
+#         type: number
+#         default: 30
+
+# jobs:
+#   cyclone-dx:
+#     runs-on: arc-runner-set
+#     timeout-minutes: ${{ inputs.timeout-minutes }}
+    
+#     container:
+#       image: ghcr.io/oss-review-toolkit/ort:37.0.0
+    
+#     steps:
+#       - name: Checkout Repository
+#         uses: actions/checkout@v4
+#         with:
+#           fetch-depth: 0
+
+#       - name: Setup PNPM
+#         uses: pnpm/action-setup@v4
+      
+#       - name: Install dependencies and run ORT
+#         shell: bash
+#         run: |          
+#           # Install dependencies
+#           pnpm install
+          
+#           # Run ORT analyze
+#           ort analyze --input-dir . --output-dir .
+          
+#           # Generate CycloneDX report
+#           ort report \
+#             -i "analyzer-result.yml" \
+#             -o "." \
+#             -f "CycloneDx" \
+#             --report-option "CycloneDx=output.file.formats=json" \
+#             --repository-configuration-file ".ort.yml"
+      
+#       - name: Upload SBOM artifacts
+#         uses: actions/upload-artifact@v4
+#         with:
+#           name: sbom-reports
+#           path: |
+#             analyzer-result.yml
+#             bom.cyclonedx.json
+#           retention-days: 30
