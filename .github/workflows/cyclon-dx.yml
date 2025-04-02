@@ -21,24 +21,16 @@ jobs:
       
       - name: Run ORT Action
         uses: oss-review-toolkit/ort-ci-github-action@v1
-        with:
-          # Run only analyzer and reporter steps to generate SBOM
-          run: 'analyzer,reporter'
-          
-          # Generate CycloneDX report
-          ort-cli-report-args: >
-            -f CycloneDx
-            --report-option "CycloneDx=output.file.formats=json"
-            --repository-configuration-file ".ort.yml"
+    
       
-      - name: Upload SBOM Artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: sbom-reports
-          path: |
-            .ort/analyzer/analyzer-result.yml
-            .ort/reporter/bom.cyclonedx.json
-          retention-days: 30
+    #   - name: Upload SBOM Artifacts
+    #     uses: actions/upload-artifact@v4
+    #     with:
+    #       name: sbom-reports
+    #       path: |
+    #         .ort/analyzer/analyzer-result.yml
+    #         .ort/reporter/bom.cyclonedx.json
+    #       retention-days: 30
 
 
 
