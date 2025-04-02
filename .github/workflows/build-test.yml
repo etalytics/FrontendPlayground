@@ -30,7 +30,7 @@ jobs:
 
       - name: Build Affected Projects
         run:
-            pnpm exec nx affected -t build
+            pnpm exec nx affected -t build -c production
         continue-on-error: false
 
       - name: Publish Test Report
