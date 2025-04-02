@@ -32,6 +32,23 @@ jobs:
         run: pnpm exec nx affected -t e2e
         timeout-minutes: ${{ inputs.timeout-minutes }}
 
+      - name: Log Test Report
+        if: always()
+        run: |
+          echo "=== E2E Test Report Summary ==="
+          if [ -d "playwright-report" ]; then
+            echo "Playwright report exists at: $(pwd)/playwright-report"
+            ls -la playwright-report
+            
+            if [ -f "playwright-report/index.html" ]; then
+              echo "HTML report index exists"
+            fi
+          else
+            echo "No playwright-report directory found"
+            echo "Current directory contents:"
+            ls -la
+          fi
+
       - name: Publish Test Report
         if: always()
         uses: ./.github/actions/publish-report
