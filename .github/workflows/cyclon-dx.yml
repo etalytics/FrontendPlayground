@@ -6,7 +6,7 @@ on:
       timeout-minutes:
         required: false
         type: number
-        default: 15
+        default: 10
 
 jobs:
   cyclone-dx:
@@ -22,17 +22,13 @@ jobs:
       - name: Setup Environment
         uses: ./.github/actions/setup-environment
         with:
-          enable-cache: false
-      
-      - name: Install cyclonedx-node-pnpm
-        shell: bash
-        run: npm install -g @cyclonedx/cyclonedx-node-pnpm
+          enable-cache: 'true'
       
       - name: Generate SBOM
         shell: bash
         run: |
-          # Generate CycloneDX SBOM in JSON format
-          cyclonedx-node-pnpm --output-format json --output-file bom.cyclonedx.json
+          # Generate CycloneDX SBOM in JSON format using pnpx
+          pnpx @cyclonedx/cyclonedx-node-pnpm --output-format json --output-file bom.cyclonedx.json
       
       - name: Upload SBOM Artifact
         uses: actions/upload-artifact@v4
