@@ -1,0 +1,6 @@
+/* somehow does not work */
+/* @import 'tailwindcss'; */
+
+/* instead this works... https://stackoverflow.com/a/79423588 */
+@import 'tailwindcss/theme';
+@import 'tailwindcss/utilities';
