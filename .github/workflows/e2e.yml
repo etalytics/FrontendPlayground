@@ -36,17 +36,21 @@ jobs:
         if: always()
         run: |
           echo "=== E2E Test Report Summary ==="
-          if [ -d "playwright-report" ]; then
-            echo "Playwright report exists at: $(pwd)/playwright-report"
-            ls -la playwright-report
-            
-            if [ -f "playwright-report/index.html" ]; then
-              echo "HTML report index exists"
-            fi
+          if [ -f ".report/e2e.json" ]; then
+            echo "E2E report exists at: $(pwd)/.report/e2e.json"
+            echo "Report content:"
+            cat .report/e2e.json
           else
-            echo "No playwright-report directory found"
-            echo "Current directory contents:"
-            ls -la
+            echo "No report found at .report/e2e.json"
+            echo "Checking .report directory:"
+            if [ -d ".report" ]; then
+              echo ".report directory exists. Contents:"
+              ls -la .report
+            else
+              echo ".report directory not found"
+              echo "Current directory contents:"
+              ls -la
+            fi
           fi
 
       - name: Publish Test Report
