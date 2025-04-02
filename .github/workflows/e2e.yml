@@ -32,26 +32,6 @@ jobs:
         run: pnpm exec nx affected -t e2e
         timeout-minutes: ${{ inputs.timeout-minutes }}
 
-      - name: Log Test Report
-        if: always()
-        run: |
-          echo "=== E2E Test Report Summary ==="
-          if [ -f ".report/e2e.json" ]; then
-            echo "E2E report exists at: $(pwd)/.report/e2e.json"
-            echo "Report content:"
-            cat .report/e2e.json
-          else
-            echo "No report found at .report/e2e.json"
-            echo "Checking .report directory:"
-            if [ -d ".report" ]; then
-              echo ".report directory exists. Contents:"
-              ls -la .report
-            else
-              echo ".report directory not found"
-              echo "Current directory contents:"
-              ls -la
-            fi
-          fi
 
       - name: Publish Test Report
         if: always()
