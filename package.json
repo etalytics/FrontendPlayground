@@ -38,7 +38,7 @@
     "@nx/jest": "20.7.0",
     "@nx/js": "20.7.0",
     "@nx/playwright": "20.7.0",
-    "@nx/web": "20.7.0",
+    "@nx/web": "20.7.1",
     "@nx/workspace": "20.7.0",
     "@playwright/test": "^1.36.0",
     "@schematics/angular": "19.2.5",
